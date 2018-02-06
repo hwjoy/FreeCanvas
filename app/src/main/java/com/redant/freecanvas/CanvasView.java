@@ -89,8 +89,8 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback, R
 
 
             case MotionEvent.ACTION_MOVE:
-//                mPath.quadTo(mLastX, mLastY, event.getX(), event.getY());
-                mPath.lineTo(event.getX(), event.getY());
+                mPath.quadTo(mLastX, mLastY, (mLastX + event.getX()) / 2, (mLastY + event.getY()) / 2);
+//                mPath.lineTo(event.getX(), event.getY());
 
                 mLastX = event.getX();
                 mLastY = event.getY();
@@ -117,18 +117,19 @@ public class CanvasView extends SurfaceView implements SurfaceHolder.Callback, R
     }
 
     private void drawing() {
-        try {
-            if (mSurfaceHolder != null) {
+        if (mSurfaceHolder == null) {
+            Log.w(TAG, "SurfaceHolder is null.");
+            return;
+        }
+
+        synchronized (mSurfaceHolder) {
+            try {
                 mCanvas = mSurfaceHolder.lockCanvas();
                 mCanvas.drawColor(Color.WHITE);
                 mCanvas.drawPath(mPath, mPaint);
-            } else {
-                Log.w(TAG, "SurfaceHolder is null.");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (mSurfaceHolder != null) {
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
                 mSurfaceHolder.unlockCanvasAndPost(mCanvas);
             }
         }

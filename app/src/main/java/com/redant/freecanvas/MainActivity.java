@@ -105,11 +105,12 @@ public class MainActivity extends AppCompatActivity {
         // Upon interacting with UI controls, delay any scheduled hide()
         // operations to prevent the jarring behavior of controls going away
         // while interacting with the UI.
-        findViewById(R.id.dummy_button).setOnTouchListener(new View.OnTouchListener() {
+//        findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
+
+        findViewById(R.id.clear_button).setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onTouch(View v, MotionEvent event) {
+            public void onClick(View v) {
                 mContentView.clear();
-                return true;
             }
         });
     }
